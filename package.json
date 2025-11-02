@@ -1,0 +1,40 @@
+{
+  "name": "velura-server",
+  "version": "1.0.0",
+  "main": "api.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon ./api.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "data:import": "node ./orderSeeeder.js",
+    "data:destroy": "node seeder -d",
+    "seed:users": "node userSeeder.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@faker-js/faker": "^9.9.0",
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
+    "express-rate-limit": "^7.1.5",
+    "faker": "^6.6.6",
+    "firebase-admin": "^13.4.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.1",
+    "multer": "^2.0.1",
+    "nodemailer": "^7.0.4",
+    "nodemon": "^3.1.10",
+    "razorpay": "^2.9.6",
+    "resend": "^6.0.1",
+    "shortid": "^2.2.17",
+    "socket.io": "^4.8.1",
+    "validator": "^13.15.15"
+  }
+}
