@@ -83,12 +83,17 @@ app.use("/api/cart", cartRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-// Start server
-const PORT = process.env.PORT || 7000;
-const HOST = process.env.HOST || 'localhost';
+// Export the Express app for Vercel serverless functions
+export default app;
 
-app.listen(PORT,  () => {
-  console.log(`🚀 Verre Server is running on ${HOST}:${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔒 CORS Origins: ${allowedOrigins.join(', ')}`);
-});
+// Start server only in development/local environment
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  const PORT = process.env.PORT || 7000;
+  const HOST = process.env.HOST || 'localhost';
+
+  app.listen(PORT, () => {
+    console.log(`🚀 Verre Server is running on ${HOST}:${PORT}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔒 CORS Origins: ${allowedOrigins.join(', ')}`);
+  });
+}
