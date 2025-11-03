@@ -51,14 +51,16 @@ app.use((req, res, next) => {
   next();
 });
 
-// Connect to database (handles connection reuse for serverless)
-connectDb().catch(err => {
+// Connect to database (await to avoid queries before initial connection)
+try {
+  await connectDb();
+} catch (err) {
   console.error('Database connection error:', err.message);
   // Don't exit in serverless - let Vercel handle it
   if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     process.exit(1);
   }
-});
+}
 
 // Basic route
 app.get("/", (req, res) => {
