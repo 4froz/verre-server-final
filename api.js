@@ -51,15 +51,22 @@ app.use((req, res, next) => {
   next();
 });
 
-// Connect to database
-connectDb();
+// Connect to database (handles connection reuse for serverless)
+connectDb().catch(err => {
+  console.error('Database connection error:', err.message);
+  // Don't exit in serverless - let Vercel handle it
+  if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    process.exit(1);
+  }
+});
 
 // Basic route
 app.get("/", (req, res) => {
   res.json({ 
     message: "Verre API is Running",
     version: "1.0.0",
-    environment: process.env.NODE_ENV || 'development'
+    // Only expose environment in development
+    ...(process.env.NODE_ENV !== 'production' && { environment: process.env.NODE_ENV || 'development' })
   });
 });
 

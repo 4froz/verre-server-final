@@ -6,7 +6,18 @@ import Order from "../models/orderModel.js";
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    // Check if already connected (for serverless function reuse)
+    if (mongoose.connection.readyState === 1) {
+      return mongoose.connection;
+    }
+
+    // Connection options optimized for serverless environments
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      maxPoolSize: 10, // Maintain up to 10 socket connections
+      serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+      bufferCommands: false // Disable mongoose buffering
+    });
     // const orders = [];  // Array to hold the transformed orders
 
     // // Read and parse CSV file
