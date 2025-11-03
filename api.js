@@ -19,23 +19,11 @@ const app = express();
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
-// 🔒 SECURE CORS Configuration
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  process.env.ADMIN_URL
-].filter(Boolean);
+// 🔒 SECURE CORS Configuration - allow only the production frontend
+const allowedOrigin = 'https://verre-nu.vercel.app';
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: allowedOrigin,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
@@ -103,6 +91,6 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`🚀 Verre Server is running on ${HOST}:${PORT}`);
     console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`🔒 CORS Origins: ${allowedOrigins.join(', ')}`);
+    console.log(`🔒 CORS Origins: ${allowedOrigin}`);
   });
 }
